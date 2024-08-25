@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaultex.Configuration.Service", "Vaultex.Configuration.Service\Vaultex.Configuration.Service.csproj", "{592C5852-D1DF-4280-A22C-4318DA50104C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaultex.Configuration.Service", "Vaultex.Configuration.Service\Vaultex.Configuration.Service.csproj", "{592C5852-D1DF-4280-A22C-4318DA50104C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DC52E9AE-3BFF-46B7-B960-696A8BAD52EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Valutext.Database", "Modules\Valutext.Database\Valutext.Database.csproj", "{98838390-2A44-4DEC-A395-CCECDC1D4436}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaultex.Repositories", "Modules\Vaultex.Repositories\Vaultex.Repositories.csproj", "{22DC45A8-CF80-4A4C-A71C-DC5B891753AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +21,21 @@ Global
 		{592C5852-D1DF-4280-A22C-4318DA50104C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{592C5852-D1DF-4280-A22C-4318DA50104C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{592C5852-D1DF-4280-A22C-4318DA50104C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98838390-2A44-4DEC-A395-CCECDC1D4436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98838390-2A44-4DEC-A395-CCECDC1D4436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98838390-2A44-4DEC-A395-CCECDC1D4436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98838390-2A44-4DEC-A395-CCECDC1D4436}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22DC45A8-CF80-4A4C-A71C-DC5B891753AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22DC45A8-CF80-4A4C-A71C-DC5B891753AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22DC45A8-CF80-4A4C-A71C-DC5B891753AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22DC45A8-CF80-4A4C-A71C-DC5B891753AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{98838390-2A44-4DEC-A395-CCECDC1D4436} = {DC52E9AE-3BFF-46B7-B960-696A8BAD52EC}
+		{22DC45A8-CF80-4A4C-A71C-DC5B891753AD} = {DC52E9AE-3BFF-46B7-B960-696A8BAD52EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {630164FC-7D0B-4E39-9625-081BA37FCFCF}
