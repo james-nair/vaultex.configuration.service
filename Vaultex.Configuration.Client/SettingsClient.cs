@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Vaultex.Configuration.Models;
+using Vaultex.Repositories;
 using Vaultex.Settings;
 using Vaultex.Settings.Interfaces;
 
@@ -10,13 +10,13 @@ namespace Vaultex.Configuration.Client
     public class SettingsClient : ISettingsClient
     {
         private readonly ILogger<SettingsClient> _logger;
-        private readonly IDbContextFactory<ConfigContext> _dbFactory;
+        private readonly ISettingRepository _settingRepository;
         private readonly ISettingCreator _settingCreator;
 
-        public SettingsClient(ILogger<SettingsClient> logger, IDbContextFactory<ConfigContext> dbFactory, ISettingCreator settingCreator)
+        public SettingsClient(ILogger<SettingsClient> logger, ISettingRepository settingRepository, ISettingCreator settingCreator)
         {
             _logger = logger;
-            _dbFactory = dbFactory;
+            _settingRepository = settingRepository;
             _settingCreator = settingCreator;
         }
 
@@ -28,16 +28,9 @@ namespace Vaultex.Configuration.Client
         public async Task<int> BulkSaveSettings<T>(IEnumerable<T> settings) where T : Setting, new()
         {
             //Convert all Settings to SettingDbos and save to DB
-            using var dbContext = _dbFactory.CreateDbContext();
-            foreach (var setting in settings)
-            {
+            var entities = settings.Select(CreateEntityFromSetting);
+            var result = await _settingRepository.BulkCreateAsync(entities);
 
-                var dbo = CreateEntityFromSetting(setting);
-
-                dbContext.Add(dbo);
-            }
-
-            var result = await dbContext.SaveChangesAsync();
             return result;
         }
 
@@ -68,27 +61,17 @@ namespace Vaultex.Configuration.Client
 
         public async Task<IEnumerable<T>> GetSettingsByType<T>(Type t) where T : Setting, new()
         {
-            IEnumerable<T> settings = [];
-            using (var dbContext = await _dbFactory.CreateDbContextAsync())
-            {
+            var entites = await _settingRepository.GetByType(t);
+            var settings = entites.Select(e => CreateSettingFromDbo<T>(e));
 
-                IQueryable<SettingDbo> query = from s in dbContext.Settings
-                                               where s.Type == t.Name
-                                               select s;
-                var list = await query.ToListAsync();
-                settings = list.Select(CreateSettingFromDbo<T>).Where(x => x != null);
-            }
             return settings;
         }
 
         public async Task<bool> SaveSetting<T>(T setting) where T : Setting, new()
         {
-            using var dbContext = await _dbFactory.CreateDbContextAsync();
+            //using var dbContext = await _dbFactory.CreateDbContextAsync();
             var dbo = CreateEntityFromSetting(setting);
-            dbContext.Add(dbo);
-
-            var result = await dbContext.SaveChangesAsync();
-            return result == 1;
+            return await _settingRepository.CreateAsync(dbo);
         }
 
         public Task<bool> UpdateAsync<T>(T entity)
@@ -99,17 +82,18 @@ namespace Vaultex.Configuration.Client
 
         public async Task<IEnumerable<T>> GetSettingsByBase<T>() where T : Setting
         {
-            IEnumerable<T> settings = [];
-            using (var dbContext = await _dbFactory.CreateDbContextAsync())
-            {
+            //IEnumerable<T> settings = [];
+            //using (var dbContext = await _dbFactory.CreateDbContextAsync())
+            //{
 
-                IQueryable<SettingDbo> query = from s in dbContext.Settings
-                                               where s.BaseType == typeof(T).Name
-                                               select s;
-                var list = await query.ToListAsync();
-                settings = list.Select(CreateSettingWithBase<T>).Where(x => x != null)!;
-            }
-            return settings;
+            //    IQueryable<SettingDbo> query = from s in dbContext.Settings
+            //                                   where s.BaseType == typeof(T).Name
+            //                                   select s;
+            //    var list = await query.ToListAsync();
+            //    settings = list.Select(CreateSettingWithBase<T>).Where(x => x != null)!;
+            //}
+            var entities = await _settingRepository.GetByBaseType(typeof(T));
+            return entities.Select(CreateSettingWithBase<T>).Where(e => e != null)!;
         }
 
         private T CreateSettingFromDbo<T>(SettingDbo dbo) where T : Setting, new()

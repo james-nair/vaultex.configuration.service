@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Vaultex.Configuration;
 using Vaultex.Configuration.Client;
 using Vaultex.Configuration.Service.Jobs;
 using Vaultex.Database.Extensions;
 using Vaultex.Database.Options;
+using Vaultex.Repositories.Extensions;
 using Vaultex.Service.Shared.Hangfire;
 using Vaultex.Service.Shared.Services;
 using Vaultex.Settings;
@@ -12,12 +12,22 @@ using Vaultex.Settings.Definitions;
 using Vaultex.Settings.Interfaces;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.AddLogging(builder => builder.AddSimpleConsole(options =>
+{
+    options.SingleLine = true;
+    options.IncludeScopes = true;
+    options.TimestampFormat = "HH:mm:ss.fff ";
+}));
+
 builder.Services.AddOptions();
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection(nameof(DatabaseOptions)));
 
-builder.Services.RegisterDbContext<ConfigContext>(options => options.UseNpgsql(DBConnection.ConnectionString("vt_configuration", builder.Configuration).ConnectionString));
+
 
 //Dependency injections
+
+builder.Services.AddConfigurationRepositories(builder.Configuration);
 
 builder.Services.AddSingleton<ISettingsClient, SettingsClient>();
 builder.Services.AddSingleton<ISettingCreator, SettingCreator>();

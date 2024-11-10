@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Modules\Vaultex.Configuration\Vaultex.Configuration.csproj" />
     <ProjectReference Include="..\Modules\Vaultex.Database\Vaultex.Database.csproj" />
+    <ProjectReference Include="..\Modules\Vaultex.Repositories\Vaultex.Repositories.csproj" />
     <ProjectReference Include="..\Modules\Vaultex.Service.Shared\Vaultex.Service.Shared.csproj" />
     <ProjectReference Include="..\Modules\Vaultex.Settings\Vaultex.Settings.csproj" />
     <ProjectReference Include="..\Vaultex.Configuration.Client\Vaultex.Configuration.Client.csproj" />
