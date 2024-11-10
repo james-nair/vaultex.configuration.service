@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modules\Vaultex.Configuration\Vaultex.Configuration.csproj" />
     <ProjectReference Include="..\Modules\Vaultex.Settings\Vaultex.Settings.csproj" />
-    <ProjectReference Include="..\Vaultex.Configuration\Vaultex.Configuration.csproj" />
   </ItemGroup>
 
 </Project>
